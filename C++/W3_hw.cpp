@@ -8,53 +8,29 @@ int main(void)
   cin>>major;
 
   int studentnum;
-<<<<<<< HEAD
-  cout<<"ÇĞ¹øÀ» ÀÔ·ÂÇÏ¼¼¿ä:";
-=======
-  cout<<"í•™ë²ˆì„ ì…ë ¥í•˜ì„¸ìš”:";
->>>>>>> 76319c4aa172fd73573cbee94327f323fa8e682f
+  cout<<"??? ?????:";
   cin>>studentnum;
 
   char student[100];
 
-<<<<<<< HEAD
-  cout<<"ÀÌ¸§À» ÀÔ·ÂÇÏ¼¼¿ä:";
-=======
-  cout<<"ì´ë¦„ì„ ì…ë ¥í•˜ì„¸ìš”:";
->>>>>>> 76319c4aa172fd73573cbee94327f323fa8e682f
+  cout<<"??? ?????:";
 
   cin>>student;
 
   char project[100];
-<<<<<<< HEAD
-  cout<<"Á¦¸ñÀ» ÀÔ·ÂÇÏ¼¼¿ä:";
+  cout<<"??? ?????:";
   cin>>project;
 
-  cout<<"ÇĞ°ú:"<<major<<endl<<"ÇĞ¹ø:"<<studentnum<<endl<<
-  "ÀÌ¸§:"<<student<<endl<<endl<<"Á¦¸ñ:"<<project<<endl<<endl;
+  cout<<"??:"<<major<<endl<<"??:"<<studentnum<<endl<<
+  "??:"<<student<<endl<<endl<<"??:"<<project<<endl<<endl;
 
-  cout<<"¼ö¸¦ ÀÔ·ÂÇÏ¼¼¿ä:";
-=======
-  cout<<"ì œëª©ì„ ì…ë ¥í•˜ì„¸ìš”:";
-  cin>>project;
-
-  cout<<"í•™ê³¼:"<<major<<endl<<"í•™ë²ˆ:"<<studentnum<<endl<<
-  "ì´ë¦„:"<<student<<endl<<endl<<"ì œëª©:"<<project<<endl<<endl;
-
-  cout<<"ìˆ˜ë¥¼ ì…ë ¥í•˜ì„¸ìš”:";
->>>>>>> 76319c4aa172fd73573cbee94327f323fa8e682f
+  cout<<"?? ?????:";
 
   int num;
   cin >> num;
 
-<<<<<<< HEAD
-  cout << "ÀÔ·ÂµÈ Á¤¼ö´Â" <<num << "ÀÔ´Ï´Ù"<<endl;
+  cout << "??? ???" <<num << "???"<<endl;
+  
 
   return 0;
 }
-=======
-  cout << "ì…ë ¥ëœ ì •ìˆ˜ëŠ”" <<num << "ì…ë‹ˆë‹¤"<<endl;
-
-  return 0;
-}
->>>>>>> 76319c4aa172fd73573cbee94327f323fa8e682f
