@@ -8,28 +8,29 @@ int main(void)
   cin>>major;
 
   int studentnum;
-  cout<<"??? ?????:";
+  cout<<"학번을 입력하세요:";
   cin>>studentnum;
 
   char student[100];
 
-  cout<<"??? ?????:";
+  cout<<"이름을 입력하세요:";
 
   cin>>student;
 
   char project[100];
-  cout<<"??? ?????:";
+  cout<<"제목을 입력하세요:";
   cin>>project;
 
-  cout<<"??:"<<major<<endl<<"??:"<<studentnum<<endl<<
-  "??:"<<student<<endl<<endl<<"??:"<<project<<endl<<endl;
+  cout<<"학과:"<<major<<endl<<"학번:"<<studentnum<<endl<<
+  "이름:"<<student<<endl<<endl<<"제목:"<<project<<endl<<endl;
 
-  cout<<"?? ?????:";
+  cout<<"수를 입력하세요:";
 
   int num;
   cin >> num;
 
-  cout << "??? ???" <<num << "???"<<endl;
+  cout << "입력된 정수는" <<num << "입니다"<<endl;
+  cout << "입력된 정수는" <<num << "입니다"<<endl;
   
 
   return 0;
