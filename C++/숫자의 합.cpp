@@ -11,6 +11,6 @@ int main(void)
     cin >> Num[a];
     Sum += Num[a];
   }
-  cout << "¼ıÀÚÀÇ ÇÕ = " << Sum << endl;
+  cout << "ìˆ«ìì˜ í•© = " << Sum << endl;
   return 0;
 }
