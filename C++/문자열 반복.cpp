@@ -27,6 +27,7 @@ int main(void){
                 P[T] += S[T].substr(a,1);
             }
         }
+
     
         T++;
     }
