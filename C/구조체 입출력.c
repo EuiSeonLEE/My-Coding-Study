@@ -14,7 +14,7 @@ struct Student Input(){
     printf("Number : ");
     scanf("%d", &(Temp.Number));
     printf("Name : ");
-    scanf("%s", &(Temp.Name));
+    scanf("%s", Temp.Name);
     printf("Age : ");
     scanf("%d", &(Temp.Age));
     
