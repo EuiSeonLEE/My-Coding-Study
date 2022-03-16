@@ -9,29 +9,33 @@ int main(void){
     int a = 0, Cnt = 0;
     
     getline(cin, S);
-    cout << S <<endl;
-    cout << S.size() <<endl;
+    cout << S << endl;
+    cout << S.size() << endl;
     int b;
   
 
 
     while(1){
-        b = S.find(" ", a);
-        cout << P.find(" ", a) <<endl;
-        if(b > -1){
+        a = S.find(" ");
+        cout << "a = " << a <<endl;
+        
+        if(a > -1){
             
-            P = S.substr(a, S.find(" ", a));
-            a = S.find(" ", a);
-            cout << a <<endl;
+            P = S.substr(0, S.find(" "));
+            cout << " P =" << P <<endl; 
             if(P.size() > 0){
                 Cnt++;
-                
             }
+            S = S.substr(a+1);
         }
-        
-        S = S.substr(a+1);
-        cout << "S = " << S<<endl;
-        if(S.size() < 1) break;
+        else {
+            P = S;
+            cout << " P =" << P <<endl; 
+            if(P.size() > 0) {
+                Cnt++;
+            }
+            break;
+        }
     }
     cout << Cnt <<endl;
     return 0;
