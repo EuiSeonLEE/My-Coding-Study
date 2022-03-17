@@ -1,28 +1,20 @@
 #include <iostream>
-#include <vector>
 #include <string>
 using namespace std;
 
 int main(void){
     string S, P;
-    
     int a = 0, Cnt = 0;
-    
     getline(cin, S);
-    cout << S << endl;
-    cout << S.size() << endl;
-    int b;
-  
-
-
+    //cout << S << endl;
+    //cout << S.size() << endl;
     while(1){
         a = S.find(" ");
-        cout << "a = " << a <<endl;
+        //cout << "a = " << a <<endl;
         
         if(a > -1){
-            
             P = S.substr(0, S.find(" "));
-            cout << " P =" << P <<endl; 
+            //cout << " P =" << P <<endl; 
             if(P.size() > 0){
                 Cnt++;
             }
@@ -30,7 +22,7 @@ int main(void){
         }
         else {
             P = S;
-            cout << " P =" << P <<endl; 
+            //cout << " P =" << P <<endl; 
             if(P.size() > 0) {
                 Cnt++;
             }
