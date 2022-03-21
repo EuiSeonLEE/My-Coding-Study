@@ -25,7 +25,7 @@ print(e[-1])
 #문자열 자료형
 #a[(이상):(미만):(간격)]
 print(e[:5])
-print(e[::-1])#부호가 들어가면 반대로 읽는거임
+print(e[::-2])#부호가 들어가면 반대로 읽는거임
 
 h = "hey, hey you, {name} you".format(name = 'yeah')
 print(h)
