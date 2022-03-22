@@ -21,9 +21,9 @@ int main(void){
             //cout << b << " : " <<Words[b].find(Words[b].substr(Cnt,1), Cnt+1)<<" : "<<Words[b].find(Words[b].substr(Cnt,1),Cnt)<<endl;
             //b번째 단어의 Cnt번째 알파벳이 다음 번째에도 존재한다면
             if(Words[b].find(Words[b].substr(Cnt,1), Cnt+1) != -1){  
-                //b번째 단어의 Cnt번째 알파벳이 연속허자 않는다면
+                //b번째 단어의 Cnt번째 알파벳이 연속하지 않는다면
                 if(Words[b].find(Words[b].substr(Cnt,1), Cnt+1) > Words[b].find(Words[b].substr(Cnt,1),Cnt) + 1){
-                    Cnt = 0;
+                    Cnt = 0; //b번째 단어는 연속단어 인정X
                     break;
                 }
                 else Cnt++;
