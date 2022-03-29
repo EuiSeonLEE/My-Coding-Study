@@ -1,10 +1,11 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <stdio.h>
 using namespace std;
 
 int main(void){
-    vector<short> arr, arr2;
+    vector<int> arr, arr2;
     int Num = 0;
     int arrNum = 0;
     cin >> Num;
@@ -20,7 +21,7 @@ int main(void){
     //sort(arr.begin()+(Num/2),arr.end());
     //inplace_merge(arr.begin(),arr.begin()+(Num/2),arr.end());
  
-    for(short b = 0; b < arr.size(); b++){
+    for(int b = 0; b < arr.size(); b++){
         cout << arr[b] << '\n'; //endl은 flush을 사용하기 때문에 느리다...
     }
     return 0;
