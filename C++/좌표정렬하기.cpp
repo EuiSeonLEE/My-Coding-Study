@@ -24,7 +24,7 @@ int main(void){
     sort(XY.begin(),XY.end(), compare);
     
     for(auto a:XY){
-        printf("%d %d\n",a.first,a.second); //cout은 느리다...
+        printf("%d %d\n",a.first,a.second); //cout은 느리다..
     }
     return 0;
 }
