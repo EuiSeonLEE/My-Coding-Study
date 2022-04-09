@@ -15,7 +15,5 @@ vector<int> solution(vector<int> array, vector<vector<int>> commands) {
         answer.clear();
         answer.shrink_to_fit();
     }
-    
-    
     return buffer;
 }
