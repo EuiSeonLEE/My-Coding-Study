@@ -41,7 +41,6 @@ int main(void){
         else if(order == "top"){
             if(stk.empty()) cout << "-1\n";
             else cout << stk.top() << "\n";
-            
         }
     }
     
