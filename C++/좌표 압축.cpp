@@ -27,6 +27,8 @@ int main(void){
         
     }
     sort(UniqueSort.begin(),UniqueSort.end());
+    //unique()함수는 중복되는 요소(숫자,문자열 등)들을 배열 맨뒤로 보내버린다.
+    //return되는 건 (배열크기 - 중복요소갯수)이다.
     UniqueSort.erase(unique(UniqueSort.begin(),UniqueSort.end()),UniqueSort.end());
     for(int a = 0; a < Coordinates.size(); a++){
         auto point = lower_bound(UniqueSort.begin(), UniqueSort.end(), Coordinates[a]);
