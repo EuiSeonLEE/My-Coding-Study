@@ -22,7 +22,7 @@ int main(void){
     int num = 0;
     string put_wall = "";
     bool Not = true;
-    //중간고사 끝나고 코딩연습 다시 재개할 것.
+    //중간고사 끝나고 코딩연습 다시 재개할 것..
 
     cin >> cnt;
     for(int a = 0; a < cnt; a++){
