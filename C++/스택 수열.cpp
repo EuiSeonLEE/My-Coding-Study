@@ -23,8 +23,8 @@ int main(void){
     string put_wall = "";
     bool Not = true;
     //중간고사 끝나고 코딩연습 다시 재개할 것....
-    //오미크론 7일 째.
-
+    //오미크론에서 개같이 부활
+    //중간고사 종료 D-3
     cin >> cnt;
     for(int a = 0; a < cnt; a++){
         cin >> num;
