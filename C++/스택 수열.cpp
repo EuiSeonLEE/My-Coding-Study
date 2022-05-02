@@ -16,60 +16,31 @@ int main(void){
     vector<int> array;
     
     stack<int> stk;
-    stack<int> stk_sub;
-    stack<char> result;
-    int cnt = 0;
+    vector<char> result;
+    int cnt = 0, array_cnt = 0;
     int num = 0;
     string put_wall = "";
-    bool Not = true;
-    //중간고사 끝나고 코딩연습 다시 재개할 것....
-    //오미크론에서 개같이 부활
-    //중간고사 종료 D-1
+    
+    //중간고사 종료 D-DAY
     cin >> cnt;
     for(int a = 0; a < cnt; a++){
         cin >> num;
         array.push_back(num);
     }//{4,3,6,8,7,5,2,1} 
     
-    for(int b = array.size() - 1; b >= 0; b--){
-        if(!stk.empty()){
-            if(array[b] < stk.top()){
-                stk_sub.push(stk.top());
-                stk.pop();
-                result.push('+');
-                b++;
-            }
-            else {
-                stk.push(array[b]);
-                result.push('-');
-      
-            }
-        }
-        else {
-            if(Not){
-                stk.push(array[b]);
-                result.push('-');
-                Not = false;
-            }
-            else{
-                cout << "NO";
-                return 0;
-            }
-      
+    for(int b = 1; b <= cnt; b++){
+        stk.push(b);
+        result.push_back('+');
+        while(!stk.empty() && stk.top() == array[array_cnt]){
+            stk.pop();
+            result.push_back('-');
+            array_cnt++;
         }
     }
-    if(!stk_sub.empty()){
-        while(!stk_sub.empty()){
-            stk.push(stk_sub.top());
-            stk_sub.pop();
-            result.push('+');
-
-        }
-    }
-    if(!result.empty()){
-        while(!result.empty()){
-            cout << result.top() << "\n";
-            result.pop();
+    if(!stk.empty()) cout << "NO\n";
+    else {
+        for(auto c : result){
+            cout << c << "\n";
         }
     }
     return 0;
