@@ -21,7 +21,6 @@ int main(void){
     int num = 0;
     string put_wall = "";
     
-    //중간고사 종료 D-DAY
     cin >> cnt;
     for(int a = 0; a < cnt; a++){
         cin >> num;
