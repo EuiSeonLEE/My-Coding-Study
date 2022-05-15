@@ -12,7 +12,7 @@ int main(void){
     cin.tie(NULL);
     cout.tie(NULL);
     
-    queue <int> q;
+    queue <int> q3;
    
     return 0;
 }
