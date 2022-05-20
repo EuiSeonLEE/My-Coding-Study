@@ -10,7 +10,7 @@ int main(void){
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     cout.tie(NULL);
-    
+    //머신러닝 중...
     queue <int> q;
     vector <int> v;
     int N = 0, K = 0, cnt = 0;
