@@ -18,28 +18,27 @@ int main(void){
     cin >> N;
     cin >> K;
     for(int a = 1; a <= N; a++) q.push(a);
-    if(K == 1){
-        while(q.size() > 0){
-            v.push_back(q.front());
-            q.pop();
-        }
-    }
-    else {
-        while(q.size() > 0){
-            cnt++;
-            if(cnt%K == 0){
+        if(K == 1){
+            while(q.size() > 0){
                 v.push_back(q.front());
                 q.pop();
-                cnt++;
             }
-            q.push(q.front());
-            q.pop();
         }
+        else {
+            while(q.size() > 0){
+                cnt++;
+                if(cnt%K == 0){
+                    v.push_back(q.front());
+                    q.pop();
+                    cnt++;
+                }
+                q.push(q.front());
+                q.pop();
+            }
     }
     cout << "<" << v[0];
     for(int a = 1; a < v.size(); a++) cout <<  ", " << v[a];
     cout << ">";
-
     
     return 0;
 }
