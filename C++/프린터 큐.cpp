@@ -5,7 +5,7 @@
 #include <queue>
 
 using namespace std;
-//(미완성)
+//(미완성).
 //우선순위 큐를 사용해야함
 int main(void){
     ios_base::sync_with_stdio(false);
