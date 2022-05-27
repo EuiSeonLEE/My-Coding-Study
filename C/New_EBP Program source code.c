@@ -3,7 +3,7 @@
 #include<stdio.h>
 #include<math.h>
 #include<stdlib.h>
-#include<time.h>      //time()
+#include<time.h>      //time(
 
 #pragma warning(disable : 4996)
 #pragma warning(disable : 4244)

@@ -28,6 +28,7 @@ int main(void){
 				break;
 			}
 		}
+        
         //point = (int)(lower_bound(dq.begin(), dq.end(), Num) - dq.begin());
            // cout << point << " : " << dq.size() << "\n";
             if(point >= (dq.size() - point)) {
