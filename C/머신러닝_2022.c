@@ -12,7 +12,7 @@
 #define InputNUM 2
 #define OutputNUM 1
 #define hlnum 10
-#define Bias 1
+#define Bias 0
 #define eta 0.9
 
 
