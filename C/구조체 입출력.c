@@ -19,8 +19,7 @@ struct Student Input(){
     scanf("%d", &(Temp.Age));
     
     return Temp;
-
-}
+};
 void Output(struct Student Temp, int Cnt){
     printf("Student[%d] : %d, %s, %d\n", Cnt, Temp.Number, Temp.Name, Temp.Age);
 }

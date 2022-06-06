@@ -12,9 +12,9 @@
 #define OutputNUM 1
 #define HLnum 5
 #define bias 1
-#define ETA 0.5
+#define ETA 0.125
 
-int HLneurons[10] = { 8, 10, 5, 4, 12, 2, 7, 13, 3, 4 };
+int HLneurons[10] = { 15, 15, 15, 15, 15, 15, 15, 15, 15, 15};
 
 double HLw[10][15][15];
 double w_in[10][15];
@@ -29,14 +29,25 @@ int outputnum = OutputNUM;
 
 int main()
 {
+
+	double x1, x2, t = 0;
+	int epochs = 1;
+	time_t current;
+	struct tm* timer;
 	FILE* fd_out;
+	FILE* fd_err;
+
 	if ((fd_out = fopen("outputdata.txt", "w")) == NULL) //Error의 값을 기록할 파일
 	{
 		printf("can't find file \n"); // 읽지 못하면 에러
 		return -1;
 	}
-	double x1, x2, t = 0;
-	int epochs = 1;
+	if ((fd_err = fopen("errdata.txt", "w")) == NULL) //디테일한 Error의 값을 기록할 파일
+	{
+		printf("can't find file \n"); // 읽지 못하면 에러
+		return -1;
+	}
+	
 
 	srand(time(NULL));
 	for (int a = 0; a < InputNUM; a++) {
@@ -74,7 +85,7 @@ int main()
 		//printf("w_out_bias:%d = %lf\n", a, w_out_bias[a]);
 	}
 
-	while (cnt < 100000)
+	while (cnt < 10000)
 	{
 		double u_in[10] = { 0.0, };
 		double u[10][15] = { 0.0, }; //(hidden layer1)output U
@@ -88,10 +99,8 @@ int main()
 		E = 0.0;
 		cnt++;
 
-
-
 		FILE* fd_in;
-		if ((fd_in = fopen("inputdata.txt", "r")) == NULL)
+		if ((fd_in = fopen("X_data.txt", "r")) == NULL)
 		{
 			printf("can't find file \n"); // 읽지 못하면 에러
 			return -1;
@@ -141,10 +150,12 @@ int main()
 			}
 			/*========================E의 변화==========================*/
 			if (OutputNUM == 1) {
-				E += fabs(target[0] - u_out[0]);
+				//E += fabs(target[0] - u_out[0]);
+				E += (((target[0] - u_out[0]) * (target[0] - u_out[0]))/2);
 			}
 			else if (OutputNUM == 2) {
-				E += (fabs(target[0] - u_out[0]) + fabs(target[1] - u_out[1])) / 2;
+				//E += (fabs(target[0] - u_out[0]) + fabs(target[1] - u_out[1])) / 2;
+				E += (((target[0] - u_out[0]) * (target[0] - u_out[0]) + (target[1] - u_out[1]) * (target[1] - u_out[1]))/2);
 			}
 			/*========================Delta 구하기=========================*/
 			for (int a = 0; a < OutputNUM; a++) {
@@ -205,20 +216,20 @@ int main()
 				w_out_bias[a] += Delta_out[a] * bias * ETA;
 				//printf("w_out_bias %d = %lf\n", a, w_out_bias[a]);
 			}
-
-
-
 		}
+		current = time(NULL);
+		timer = localtime(&current);
 
 		fprintf(fd_out, "%lf\n", E);
+		fprintf(fd_err, "%d %lf %d:%d:%d:%d:%d:%d\n",epochs ,E ,timer->tm_year + 1900, timer->tm_mon + 1, timer->tm_mday, timer->tm_hour,timer->tm_min,timer->tm_sec);
 		printf("%dth : epochs - Error = %lf\n", epochs, E); //epochs횟수 구할 때
 		epochs++;
 		fclose(fd_in);
 
-		if (cnt % 500 == 0) { //w의 변화 100번의 1번씩 cmd창에 격자화
-		   for (double x2 = 1.5; x2 >= -1.5; x2 -= 0.1) {
+		/*if (cnt % 500 == 0) { //w의 변화 100번의 1번씩 cmd창에 격자화
+		   for (double x2 = 3.0; x2 >= -3.0; x2 -= 0.1) {
 			  printf("\n");
-			  for (double x1 = -2; x1 <= 3; x1 += 0.1) {
+			  for (double x1 = -3.0; x1 <= 3.0; x1 += 0.1) {
 				  double s1[10][15] = { 0.0, };
 				  double s_out1[2] = { 0.0, };
 				  double u_in1[10] = { 0.0, };
@@ -260,13 +271,13 @@ int main()
 					  u_out[a] = 1.0 / (1.0 + exp(-s_out1[a]));
 				  }
 				 if (u_out[OutputNUM-1] >= 0.5)printf("O ");
-				 else printf("x ");
+				 else printf(". ");
 			  }
 		   }
 		   printf("\n");
 		   Sleep(150);
 		   system("cls"); //영상으로 제작할시 사용
-		}
+		}*/
 	}
 	
 

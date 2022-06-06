@@ -21,7 +21,6 @@ int main(void){
 
     cin >> N;
     for(int a = 0; a < N; a++){
-        
         cin >> num >> cnt;
         num_cnt.push_back(make_pair(num, cnt));
         for(int b = 0; b < num_cnt[a].first; b++){
@@ -49,3 +48,4 @@ int main(void){
 
     return 0;
 }
+
