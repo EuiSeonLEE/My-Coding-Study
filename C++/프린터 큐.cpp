@@ -5,9 +5,9 @@
 #include <queue>
 
 using namespace std;
-//기말 준비중18
+//취업 준비중2
 //우선순위 큐를 사용해야함
-//a
+//
 int main(void){
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
