@@ -5,7 +5,7 @@
 #include <queue>
 
 using namespace std;
-//취업 준비중3
+//취업 준비중4
 //우선순위 큐를 사용해야함
 //
 int main(void){
