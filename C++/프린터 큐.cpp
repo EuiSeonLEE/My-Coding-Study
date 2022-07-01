@@ -33,8 +33,8 @@ int main(void){
                     q.push(q.front());
                     q_ipt.pop();
                     q.pop();
-                }    
-            }            
+                }
+            }
         }
         int K = 0;
         while(q.front() != num_cnt[a].second){
