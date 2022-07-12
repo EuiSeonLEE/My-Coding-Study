@@ -6,8 +6,8 @@
 #include <numeric>
 
 using namespace std;
-//isdigit함수는 문자열의 숫자를 판단하는 함수이다.(중요)
-
+//1. isdigit함수는 문자열의 숫자를 판단하는 함수이다.(중요)
+//2. split은 왜 안돼는걸까?
 /*deque<int> split(string &input, string delimiter){
 	deque<int> ret;
 	long long pos = 0;
