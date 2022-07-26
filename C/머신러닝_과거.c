@@ -85,7 +85,7 @@ int main()
 		//printf("w_out_bias:%d = %lf\n", a, w_out_bias[a]);
 	}
 
-	while (cnt < 10000)
+	while (cnt < 2000)
 	{
 		double u_in[10] = { 0.0, };
 		double u[10][15] = { 0.0, }; //(hidden layer1)output U
@@ -100,7 +100,7 @@ int main()
 		cnt++;
 
 		FILE* fd_in;
-		if ((fd_in = fopen("X_data.txt", "r")) == NULL)
+		if ((fd_in = fopen("stardata.txt", "r")) == NULL)
 		{
 			printf("can't find file \n"); // 읽지 못하면 에러
 			return -1;
@@ -222,14 +222,14 @@ int main()
 
 		fprintf(fd_out, "%lf\n", E);
 		fprintf(fd_err, "%d %lf %d:%d:%d:%d:%d:%d\n",epochs ,E ,timer->tm_year + 1900, timer->tm_mon + 1, timer->tm_mday, timer->tm_hour,timer->tm_min,timer->tm_sec);
-		printf("%dth : epochs - Error = %lf\n", epochs, E); //epochs횟수 구할 때
+		//printf("%dth : epochs - Error = %lf\n", epochs, E); //epochs횟수 구할 때
 		epochs++;
 		fclose(fd_in);
 
-		/*if (cnt % 500 == 0) { //w의 변화 100번의 1번씩 cmd창에 격자화
-		   for (double x2 = 3.0; x2 >= -3.0; x2 -= 0.1) {
+		if (cnt % 100 == 0) { //w의 변화 100번의 1번씩 cmd창에 격자화
+		   for (double x2 = 2.5; x2 >= -2.5; x2 -= 0.1) {
 			  printf("\n");
-			  for (double x1 = -3.0; x1 <= 3.0; x1 += 0.1) {
+			  for (double x1 = -2.5; x1 <= 2.5; x1 += 0.1) {
 				  double s1[10][15] = { 0.0, };
 				  double s_out1[2] = { 0.0, };
 				  double u_in1[10] = { 0.0, };
@@ -277,7 +277,7 @@ int main()
 		   printf("\n");
 		   Sleep(150);
 		   system("cls"); //영상으로 제작할시 사용
-		}*/
+		}
 	}
 	
 
