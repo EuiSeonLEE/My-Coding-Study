@@ -1,5 +1,4 @@
 #define _CRT_SECURE_NO_WARNINGS
-
 #include<stdio.h>
 #include<math.h>
 #include<stdlib.h>
@@ -15,17 +14,15 @@
 #define Bias 0
 #define eta 0.9
 
-
-
 void append(char *dst, char c) {
     char *p = dst;
     while (*p != '\0') p++; // 문자열 끝 탐색
     *p = c;
     *(p+1) = '\0'; 
 }
+
 int main()
 {
-
 	double x1, x2, t = 0;
 	int epochs = 1;
 	time_t current;
@@ -114,8 +111,7 @@ for(int bias = 0; bias <= Bias; bias++){
             w_out_bias[a] = (double)(((rand() % 31) - 15.0) / 10.0);
             //printf("w_out_bias:%d = %lf\n", a, w_out_bias[a]);
          }
-         while (cnt < 10000)
-            {
+         while (cnt < 10000) {
                double u_in[10] = { 0.0, };
                double u[10][15] = { 0.0, }; //(hidden layer1)output U
                double u_out[2] = { 0.0, };//(hidden layer2)output U
@@ -128,14 +124,12 @@ for(int bias = 0; bias <= Bias; bias++){
                cnt++;
 
                FILE* fd_in;
-               if ((fd_in = fopen("X_data.txt", "r")) == NULL)
-               {
+               if ((fd_in = fopen("X2_data.txt", "r")) == NULL){
                   printf("can't find file \n"); // 읽지 못하면 에러
                   return -1;
                }
 
                while (fscanf(fd_in, "%lf %lf %lf\n", &x1, &x2, &t) != EOF) {
-
                   double s[10][15] = { 0.0, };
                   double s_out[2] = { 0.0, };
                   u_in[0] = x1;
@@ -190,8 +184,6 @@ for(int bias = 0; bias <= Bias; bias++){
                      Delta_out[a] = u_out[a] * (1.0 - u_out[a]) * (target[a] - u_out[a]);
                      //printf("Delata_out %d = %lf\n",a, Delta_out[a]);
                   }
-
-
                   for (int a = 0; a < HLneurons[HLnum - 1]; a++) {
                      double sum = 0.0;
                      for (int b = 0; b < OutputNUM; b++) {
@@ -216,7 +208,6 @@ for(int bias = 0; bias <= Bias; bias++){
                      for (int b = 0; b < HLneurons[0]; b++) {
                         w_in[a][b] += u_in[a] * Delta[0][b] * ETA;
                         //printf("w_in %d:%d = %lf\n", a, b, w_in[a][b]);
-
                      }
                   }
                   for (int a = HLnum - 1; a > 0; a--) {
@@ -233,7 +224,6 @@ for(int bias = 0; bias <= Bias; bias++){
                         //printf("w_out %d:%d = %lf\n", a,b, w_out[a][b]);
                      }
                   }
-
                   for (int a = HLnum - 1; a >= 0; a--) {
                      for (int b = 0; b < HLneurons[a]; b++) {
                         w_bias[a][b] += Delta[a][b] * bias * ETA;
@@ -318,9 +308,7 @@ for(int bias = 0; bias <= Bias; bias++){
 		}*/
 	
 	end_total = clock();
-   printf("총 학습 시간 : %.3f\n", (float)(end_total - start_total)/CLOCKS_PER_SEC);
-
-	
+   printf("총 학습 시간 : %.3f\n", (float)(end_total - start_total)/CLOCKS_PER_SEC);	
 
 	//getchar();
 }
