@@ -97,6 +97,7 @@ int GridTest(double u_in[], double t[], int evaluation) {
 double rate() {
 	return (double)(((rand() % 31) - 15.0) / 10.0);
 }
+
 void writeChoose(int write, double* weight_tmp) {
 	if (write == 1) {
 		fprintf(weightWrite, "%lf\n", *weight_tmp);
@@ -173,7 +174,7 @@ int main() {
 	FILE* fd_out;
 	FILE* fd_err;
 
-	if ((fd_arch = fopen("architecture.dat", "r")) == NULL) //ANN학습구조의 값을 기록할 파일
+	if ((fd_arch = fopen("architecture.dat", "r")) == NULL) //학습구조의 값을 기록할 파일
 	{
 		printf("can't find file \n"); // 읽지 못하면 에러
 		return -1;
@@ -300,7 +301,6 @@ int main() {
 			double Delta_out[2] = { 0.0, };// (hidden layer2, output layer) delta
 			double E = 0.0; //error
 
-			
 			cnt++;
 
 			/*FILE* realData;
@@ -335,7 +335,6 @@ int main() {
 						}
 						u[a + 1][b] = 1.0 / (1.0 + exp(-s[a + 1][b]));
 						//printf("u%d = %lf\n",a+1, u[a+1][b]);
-
 					}
 				}
 
