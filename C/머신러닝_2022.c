@@ -8,12 +8,41 @@
 
 #pragma warning(disable : 4996)
 #pragma warning(disable : 4244)
-#define InputNUM 2
-#define OutputNUM 1
-#define hlnum 10
-#define Bias 0
-#define eta 0.9
+int InputNUM = 2;
+int OutputNUM = 1;
+int HLnum = 10;
+int  bias = 0;
+double ETA = 0.9;
+int Epoch = 0;
+int ErrCount, WeightCount;
+int HLneurons[10] = { 15, 15, 15, 15, 15, 15, 15, 15, 15, 15};
+int get_parameter(FILE* fd_arch, FILE* fd_para){
+	if(fscanf(fd_arch, "%d ", &InputNUM) != EOF) return 1;
+   else {
+      fscanf(fd_arch, "%d ", &HLnum);
+		for(int a = 0; a < HLnum; a++){
+			fscanf(fd_arch, "%d ", &HLneurons[a]);
+		}
+		fscanf(fd_arch, "%d\n", OutputNUM);
+	
+   }
+	if(fscanf(fd_para, "%lf %d %d %d %d\n", &ETA, &Epoch, &ErrCount, &WeightCount, &bias) != EOF) return 1;
+   else return 0;	
+}
+int get_inputdata(FILE* fd_in, double u_in[], double target[]){
+   if(fscanf(fd_in, "%d ", &u_in[0]) != EOF) return 1;
 
+   else {
+      for(int a = 1; a < InputNUM; a++){
+         fscanf(fd_in, "%d ", &u_in[a]);
+      }
+      for(int b = 0; b < OutputNUM - 1; b++){
+         fscanf(fd_in, "%d", &target[b]);
+      }
+      fscanf(fd_in, "%d\n", &target[OutputNUM - 1]);
+      return 0;
+   }
+}
 void append(char *dst, char c) {
     char *p = dst;
     while (*p != '\0') p++; // 문자열 끝 탐색
@@ -23,7 +52,7 @@ void append(char *dst, char c) {
 
 int main()
 {
-	double x1, x2, t = 0;
+	double x[10] = {0.0,}, t = 0;
 	int epochs = 1;
 	time_t current;
 	struct tm* timer;
@@ -32,9 +61,19 @@ int main()
    float res_total, res_part;
    start_total = clock();
 
-for(int bias = 0; bias <= Bias; bias++){   
-   for(double ETA = 0.1; ETA < eta; ETA = ETA + 0.2){
-      for(int HLnum = 2; HLnum <= hlnum; HLnum = HLnum + 2){
+   FILE* fd_arch;
+	FILE* fd_para;
+   if ((fd_arch = fopen("architecture.dat", "r")) == NULL) //학습구조의 값을 기록할 파일
+	{
+		printf("can't find file \n"); // 읽지 못하면 에러
+		return -1;
+	}
+   if ((fd_para = fopen("parameter.dat", "r")) == NULL) //LG, error저장 epoch, weight저장 epoch
+	{
+		printf("can't find file \n"); // 읽지 못하면 에러
+		return -1;
+	}
+   while(get_parameter(fd_arch, fd_para)){
          start_part = clock();
          printf("%d : %f : %d 학습시작\n", HLnum, ETA, bias);
          char str_HLn = 64 + HLnum; // ABCD...YZ
@@ -64,7 +103,7 @@ for(int bias = 0; bias <= Bias; bias++){
             printf("can't find file \n"); // 읽지 못하면 에러
             return -1;
          }
-         int HLneurons[10] = { 15, 15, 15, 15, 15, 15, 15, 15, 15, 15};
+         
 
          double HLw[10][15][15];
          double w_in[10][15];
@@ -84,7 +123,7 @@ for(int bias = 0; bias <= Bias; bias++){
             }
          }
          srand(time(NULL));
-         for (int a = 0; a < hlnum - 1; a++) {
+         for (int a = 0; a < HLnum - 1; a++) {
             for (int b = 0; b < 15; b++) {
                for (int c = 0; c < 15; c++) {
                   HLw[a][b][c] = (double)(((rand() % 31) - 15.0) / 10.0);
@@ -100,7 +139,7 @@ for(int bias = 0; bias <= Bias; bias++){
             }
          }
          srand(time(NULL));
-         for (int a = 0; a < hlnum; a++) {
+         for (int a = 0; a < HLnum; a++) {
             for (int b = 0; b < 15; b++) {
                w_bias[a][b] = (double)(((rand() % 31) - 15.0) / 10.0);
                //printf("w_bias:%d:%d = %lf\n", a, b, w_bias[a][b]);
@@ -111,7 +150,7 @@ for(int bias = 0; bias <= Bias; bias++){
             w_out_bias[a] = (double)(((rand() % 31) - 15.0) / 10.0);
             //printf("w_out_bias:%d = %lf\n", a, w_out_bias[a]);
          }
-         while (cnt < 10000) {
+         while (cnt < Epoch) {
                double u_in[10] = { 0.0, };
                double u[10][15] = { 0.0, }; //(hidden layer1)output U
                double u_out[2] = { 0.0, };//(hidden layer2)output U
@@ -129,12 +168,10 @@ for(int bias = 0; bias <= Bias; bias++){
                   return -1;
                }
 
-               while (fscanf(fd_in, "%lf %lf %lf\n", &x1, &x2, &t) != EOF) {
+               while (get_inputdata(fd_in, u_in, target)) {
                   double s[10][15] = { 0.0, };
                   double s_out[2] = { 0.0, };
-                  u_in[0] = x1;
-                  u_in[1] = x2;
-                  target[0] = t;
+                  
 
                   // 만약 HLnum = 4
                   // HLneurons[HLnum] = {2, 3, 4, 5} 라고 한다면
@@ -240,7 +277,7 @@ for(int bias = 0; bias <= Bias; bias++){
 
                fprintf(fd_out, "%lf\n", E);
                fprintf(fd_err, "%d %lf %d:%d:%d:%d:%d:%d\n",epochs ,E ,timer->tm_year + 1900, timer->tm_mon + 1, timer->tm_mday, timer->tm_hour,timer->tm_min,timer->tm_sec);
-               //printf("%dth : epochs - Error = %lf\n", epochs, E); //epochs횟수 구할 때
+               printf("%dth : epochs - Error = %lf\n", epochs, E); //epochs횟수 구할 때
                epochs++;
                fclose(fd_in);
             }
@@ -249,11 +286,12 @@ for(int bias = 0; bias <= Bias; bias++){
             end_part = clock();
             printf("종료\n해당 부분 학습시간 : %.3f\n",(float)(end_part - start_part)/CLOCKS_PER_SEC);
             printf("==========================\n");
-         }
-      }
-   }
-      
-
+   
+   
+   
+}   
+fclose(fd_arch);
+fclose(fd_para);
 		/*if (cnt % 500 == 0) { //w의 변화 100번의 1번씩 cmd창에 격자화
 		   for (double x2 = 3.0; x2 >= -3.0; x2 -= 0.1) {
 			  printf("\n");

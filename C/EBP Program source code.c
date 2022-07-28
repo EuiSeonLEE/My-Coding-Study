@@ -8,7 +8,7 @@
 #pragma warning(disable : 4996)
 #pragma warning(disable : 4244)
 
-#define Epoch 300
+
 #define Learing_test 1 //test(0) or 학습(1)
 #define W_select 0 //Weight 설정 기존 데이터(0) or rand(1)
 #define W_epoch 200 //몇 번째 epoch의 Weight로 설정(TEST할 때 만 씀)
@@ -17,6 +17,7 @@ int InputNUM = 10;
 int OutputNUM = 1;
 int HLnum = 4;
 int bias = 1;
+int Epoch = 300;
 double ETA = 0.01; //Learning Gain
 
 int HLneurons[10] = { 15, 15, 15, 15, 15, 15, 15, 15, 15, 15};
@@ -33,7 +34,110 @@ int cnt = 0;
 int ErrCount = 0, WeightCount = 0;
 
 FILE* weightWrite, * WeightRead;
+void EBP(double u_in[], double u[][15], double u_out[], double Delta[][15], double Delta_out[], double E, double target[]){
+	double s[10][15] = { 0.0, };
+				double s_out[2] = { 0.0, };
+				
+				// 만약 HLnum = 4
+				// HLneurons[HLnum] = {2, 3, 4, 5} 라고 한다면
+				for (int a = 0; a < HLneurons[0]; a++) {
+					s[0][a] += bias * w_bias[0][a]; //바이어스 2개만 더해짐
+					for (int b = 0; b < InputNUM; b++) {
+						s[0][a] += u_in[b] * w_in[b][a];
+						//printf("s%d:%d = %lf\n", a, b, s[0][a]);
+					}
+					u[0][a] = 1.0 / (1.0 + exp(-s[0][a]));
+					//printf("u%d = %lf\n",a, u[0][a]);
+				}
 
+				for (int a = 0; a < HLnum - 1; a++) {
+					for (int b = 0; b < HLneurons[a + 1]; b++) {
+						s[a + 1][b] += bias * w_bias[a + 1][b];
+						for (int c = 0; c < HLneurons[a]; c++) {
+							s[a + 1][b] += HLw[a][b][c] * u[a][c];
+							//printf("s%d:%d = %lf\n", a + 1, a, s[a + 1][b]);
+						}
+						u[a + 1][b] = 1.0 / (1.0 + exp(-s[a + 1][b]));
+						//printf("u%d = %lf\n",a+1, u[a+1][b]);
+					}
+				}
+
+				for (int a = 0; a < OutputNUM; a++) {
+					s_out[a] += bias * w_out_bias[a];
+					for (int b = 0; b < HLneurons[HLnum - 1]; b++) {
+						s_out[a] += w_out[b][a] * u[HLnum - 1][b];
+						//printf("s_out%d = %lf\n", a, s_out[a]);
+					}
+					u_out[a] = 1.0 / (1.0 + exp(-s_out[a]));
+					//printf("u_out%d = %lf\n", a, u_out[a]);
+				}
+				/*========================E의 변화==========================*/
+				if (OutputNUM == 1) {
+					//E += fabs(target[0] - u_out[0]);
+					E += (((target[0] - u_out[0]) * (target[0] - u_out[0]))/2);
+				}
+				else if (OutputNUM == 2) {
+					//E += (fabs(target[0] - u_out[0]) + fabs(target[1] - u_out[1])) / 2;
+					E += (((target[0] - u_out[0]) * (target[0] - u_out[0]) + (target[1] - u_out[1]) * (target[1] - u_out[1]))/2);
+				}
+				/*========================Delta 구하기=========================*/
+				for (int a = 0; a < OutputNUM; a++) {
+					Delta_out[a] = u_out[a] * (1.0 - u_out[a]) * (target[a] - u_out[a]);
+					//printf("Delata_out %d = %lf\n",a, Delta_out[a]);
+				}
+
+
+				for (int a = 0; a < HLneurons[HLnum - 1]; a++) {
+					double sum = 0.0;
+					for (int b = 0; b < OutputNUM; b++) {
+						sum += w_out[a][b] * Delta_out[b];
+					}
+					Delta[HLnum - 1][a] = u[HLnum - 1][a] * (1.0 - u[HLnum - 1][a]) * sum;
+					//printf("Delata %d:%d = %lf\n",HLnum-1,a, Delta[HLnum-1][a]);
+				}
+
+				for (int a = HLnum - 1; a > 0; a--) {
+					for (int b = 0; b < HLneurons[a - 1]; b++) {
+						double sum = 0.0;
+						for (int c = 0; c < HLneurons[a]; c++) {
+							sum += Delta[a][c] * HLw[a - 1][c][b];
+						}
+						Delta[a - 1][b] = u[a - 1][b] * (1.0 - u[a - 1][b]) * sum;
+						//printf("Delata %d:%d = %lf\n",a-1,b, Delta[a-1][b]);
+					}
+				}
+				/*========================w의 변화==========================*/
+				for (int a = 0; a < InputNUM; a++) {
+					for (int b = 0; b < HLneurons[0]; b++) {
+						w_in[a][b] += u_in[a] * Delta[0][b] * ETA;
+						//printf("w_in %d:%d = %lf\n", a, b, w_in[a][b]);
+					}
+				}
+				for (int a = HLnum - 1; a > 0; a--) {
+					for (int b = 0; b < HLneurons[a - 1]; b++) {
+						for (int c = 0; c < HLneurons[a]; c++) {
+							HLw[a - 1][c][b] += u[a - 1][b] * Delta[a][c] * ETA;
+							//printf("HLw %d:%d:%d = %lf\n", a, b, c, HLw[a][b][c]);
+						}
+					}
+				}
+				for (int a = 0; a < HLneurons[HLnum - 1]; a++) {
+					for (int b = 0; b < OutputNUM; b++) {
+						w_out[a][b] += u[HLnum - 1][a] * Delta_out[b] * ETA;
+						//printf("w_out %d:%d = %lf\n", a,b, w_out[a][b]);
+					}
+				}
+				for (int a = HLnum - 1; a >= 0; a--) {
+					for (int b = 0; b < HLneurons[a]; b++) {
+						w_bias[a][b] += Delta[a][b] * bias * ETA;
+						//printf("w_bias %d:%d = %lf\n", a, b, w_bias[a][b]);
+					}
+				}
+				for (int a = 0; a < OutputNUM; a++) {
+					w_out_bias[a] += Delta_out[a] * bias * ETA;
+					//printf("w_out_bias %d = %lf\n", a, w_out_bias[a]);
+				}
+}
 int GridTest(double u_in[], double t[], int evaluation) {
 	double s[10][15] = { 0.0, };
 	double s_out[2] = { 0.0, };
@@ -161,7 +265,19 @@ void getEvaRealData(FILE* fin, FILE* eva, FILE* realData) {
 	fclose(realData);
 	fclose(eva);
 }
-
+void get_parameter(FILE* fd_arch, FILE* fd_para){
+	while(fd_arch != EOF){
+		fscanf(fd_arch, "%d ", &InputNUM);
+		fscanf(fd_arch, "%d ", &HLnum);
+		for(int a = 0; a < HLnum; a++){
+			fscanf(fd_arch, "%d ", &HLneurons[a]);
+		}
+		fscanf(fd_arch, "%d\n", OutputNUM);
+	}
+	while(fd_para != EOF){
+		fcanf(fd_para, "%lf %d %d %d %d\n", &ETA, &Epoch, &ErrCount, &WeightCount, &bias);
+	}
+}
 int main() {
 	int Learing_Test = Learing_test, w_select = W_select, w_epoch = W_epoch;
 	double x[10] = {0.0,} ,x1 ,x2 , t = 0;
@@ -310,109 +426,10 @@ int main() {
 				return -1;
 			}*/
 			rewind(fd_in);
+			
+			
 			while (fscanf(fd_in, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf\n", &u_in[0], &u_in[1], &u_in[2], &u_in[3], &u_in[4], &u_in[5], &u_in[6], &u_in[7], &u_in[8], &u_in[9], &target[0]) != EOF) {
-				double s[10][15] = { 0.0, };
-				double s_out[2] = { 0.0, };
-				
-				// 만약 HLnum = 4
-				// HLneurons[HLnum] = {2, 3, 4, 5} 라고 한다면
-				for (int a = 0; a < HLneurons[0]; a++) {
-					s[0][a] += bias * w_bias[0][a]; //바이어스 2개만 더해짐
-					for (int b = 0; b < InputNUM; b++) {
-						s[0][a] += u_in[b] * w_in[b][a];
-						//printf("s%d:%d = %lf\n", a, b, s[0][a]);
-					}
-					u[0][a] = 1.0 / (1.0 + exp(-s[0][a]));
-					//printf("u%d = %lf\n",a, u[0][a]);
-				}
-
-				for (int a = 0; a < HLnum - 1; a++) {
-					for (int b = 0; b < HLneurons[a + 1]; b++) {
-						s[a + 1][b] += bias * w_bias[a + 1][b];
-						for (int c = 0; c < HLneurons[a]; c++) {
-							s[a + 1][b] += HLw[a][b][c] * u[a][c];
-							//printf("s%d:%d = %lf\n", a + 1, a, s[a + 1][b]);
-						}
-						u[a + 1][b] = 1.0 / (1.0 + exp(-s[a + 1][b]));
-						//printf("u%d = %lf\n",a+1, u[a+1][b]);
-					}
-				}
-
-				for (int a = 0; a < OutputNUM; a++) {
-					s_out[a] += bias * w_out_bias[a];
-					for (int b = 0; b < HLneurons[HLnum - 1]; b++) {
-						s_out[a] += w_out[b][a] * u[HLnum - 1][b];
-						//printf("s_out%d = %lf\n", a, s_out[a]);
-					}
-					u_out[a] = 1.0 / (1.0 + exp(-s_out[a]));
-					//printf("u_out%d = %lf\n", a, u_out[a]);
-				}
-				/*========================E의 변화==========================*/
-				if (OutputNUM == 1) {
-					//E += fabs(target[0] - u_out[0]);
-					E += (((target[0] - u_out[0]) * (target[0] - u_out[0]))/2);
-				}
-				else if (OutputNUM == 2) {
-					//E += (fabs(target[0] - u_out[0]) + fabs(target[1] - u_out[1])) / 2;
-					E += (((target[0] - u_out[0]) * (target[0] - u_out[0]) + (target[1] - u_out[1]) * (target[1] - u_out[1]))/2);
-				}
-				/*========================Delta 구하기=========================*/
-				for (int a = 0; a < OutputNUM; a++) {
-					Delta_out[a] = u_out[a] * (1.0 - u_out[a]) * (target[a] - u_out[a]);
-					//printf("Delata_out %d = %lf\n",a, Delta_out[a]);
-				}
-
-
-				for (int a = 0; a < HLneurons[HLnum - 1]; a++) {
-					double sum = 0.0;
-					for (int b = 0; b < OutputNUM; b++) {
-						sum += w_out[a][b] * Delta_out[b];
-					}
-					Delta[HLnum - 1][a] = u[HLnum - 1][a] * (1.0 - u[HLnum - 1][a]) * sum;
-					//printf("Delata %d:%d = %lf\n",HLnum-1,a, Delta[HLnum-1][a]);
-				}
-
-				for (int a = HLnum - 1; a > 0; a--) {
-					for (int b = 0; b < HLneurons[a - 1]; b++) {
-						double sum = 0.0;
-						for (int c = 0; c < HLneurons[a]; c++) {
-							sum += Delta[a][c] * HLw[a - 1][c][b];
-						}
-						Delta[a - 1][b] = u[a - 1][b] * (1.0 - u[a - 1][b]) * sum;
-						//printf("Delata %d:%d = %lf\n",a-1,b, Delta[a-1][b]);
-					}
-				}
-				/*========================w의 변화==========================*/
-				for (int a = 0; a < InputNUM; a++) {
-					for (int b = 0; b < HLneurons[0]; b++) {
-						w_in[a][b] += u_in[a] * Delta[0][b] * ETA;
-						//printf("w_in %d:%d = %lf\n", a, b, w_in[a][b]);
-					}
-				}
-				for (int a = HLnum - 1; a > 0; a--) {
-					for (int b = 0; b < HLneurons[a - 1]; b++) {
-						for (int c = 0; c < HLneurons[a]; c++) {
-							HLw[a - 1][c][b] += u[a - 1][b] * Delta[a][c] * ETA;
-							//printf("HLw %d:%d:%d = %lf\n", a, b, c, HLw[a][b][c]);
-						}
-					}
-				}
-				for (int a = 0; a < HLneurons[HLnum - 1]; a++) {
-					for (int b = 0; b < OutputNUM; b++) {
-						w_out[a][b] += u[HLnum - 1][a] * Delta_out[b] * ETA;
-						//printf("w_out %d:%d = %lf\n", a,b, w_out[a][b]);
-					}
-				}
-				for (int a = HLnum - 1; a >= 0; a--) {
-					for (int b = 0; b < HLneurons[a]; b++) {
-						w_bias[a][b] += Delta[a][b] * bias * ETA;
-						//printf("w_bias %d:%d = %lf\n", a, b, w_bias[a][b]);
-					}
-				}
-				for (int a = 0; a < OutputNUM; a++) {
-					w_out_bias[a] += Delta_out[a] * bias * ETA;
-					//printf("w_out_bias %d = %lf\n", a, w_out_bias[a]);
-				}
+				EBP(u_in, u, u_out, Delta, Delta_out, E, target);
 			}
 			current = time(NULL);
 			timer = localtime(&current);
